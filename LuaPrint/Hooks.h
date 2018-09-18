@@ -1,16 +1,19 @@
 #pragma once
+#include "Global.h"
+
 class Hooks
 {
 public:
-	Hooks(Global g);
+	Hooks(Global _g);
 	~Hooks();
-
-	Global _Global;
-
+	bool setHooks();
+	static Global _Global;
 	typedef INT(CALLBACK * _DoString)(lua_State *L, CONST CHAR *s, size_t size);
-	_DoString oDoString;
-
 	typedef INT(CALLBACK * _GetTop)(lua_State *L);
-	_GetTop oGetTop;
+	static _DoString oDoString;
+	static _GetTop oGetTop;
+
+private:
+	bool hook_function(PVOID & t1, PBYTE t2, const char * s = NULL);
 };
 

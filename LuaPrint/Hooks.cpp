@@ -1,60 +1,61 @@
 #include "stdafx.h"
 #include "Hooks.h"
-#include "Global.h"
 
-
-Hooks::Hooks(Global g)
+Hooks::_DoString Hooks::oDoString;
+Hooks::_GetTop Hooks::oGetTop;
+Global Hooks::_Global;
+Hooks::Hooks(Global _g)
 {
-	_Global = g;
-	oDoString = (_DoString)(_Global.AddressDoString);/*
-	hook_function((PVOID &)oDoString, (PBYTE)h_Dostring, _Global.doString[2].c_str());
-
-	oGetTop = (_GetTop)(_Global.AddressGetTop);
-	hook_function((PVOID &)oGetTop, (PBYTE)h_GetTop, _Global.getTop[2].c_str());*/
+	Hooks::_Global = _g;
+	Hooks::oDoString = (Hooks::_DoString)_Global.addresses["DoString"];
+	Hooks::oGetTop = (Hooks::_GetTop)_Global.addresses["GetTop"];
 }
-
 
 Hooks::~Hooks()
 {
 }
 
-bool hook_function(PVOID & t1, PBYTE t2, const char * s = NULL)
-{
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-	DetourAttach(&t1, t2);
-	if (DetourTransactionCommit() != NO_ERROR) {
-
-		printf("[Hook] : Failed to hook %s.\n", s);
-
-		return false;
-	}
-	else {
-		printf("[Hook] : Successfully hooked %s.\n", s);
-
-		return true;
-	}
-}
-/*
 INT(CALLBACK h_Dostring)(lua_State *L, CONST CHAR *s, size_t size)
 {
 	// Log lua functions.
 	if (!(s[0] == '\0'))
 	{
-		printf("[LUA] : Exec -> %s\n", s);
+		std::cout << "[LUA] : Exec ->" << std::hex << s << std::endl;
 	}
 
 	// Return to original function.
-	return oDoString(L, s, size);
+	return Hooks::oDoString(L, s, size);
 }
 
 INT(CALLBACK h_GetTop)(lua_State *L)
 {
 	// Update lua_State pointer.
-	if (_Global.lua != L) {
-		printf("[LUA] : Lua State changed 0x%016llX -> 0x%016llX\n", _Global.lua_state, L);
-		_Global.lua_state = L;
+	if (Hooks::_Global.luaState != L) {
+		std::cout << "[LUA] : Lua State changed " << std::hex << Hooks::_Global.luaState << " -> " << std::hex << L << std::endl;
+		Hooks::_Global.luaState = L;
 	}
-	return oGetTop(L);
+	return Hooks::oGetTop(L);
 }
-*/
+
+bool Hooks::hook_function(PVOID & t1, PBYTE t2, const char * s)
+{
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	DetourAttach(&t1, t2);
+	if (DetourTransactionCommit() != NO_ERROR) {
+		std::cout << "[Hook] : Failed to hook " << s << std::endl;
+		return false;
+	}
+	else {
+		std::cout << "[Hook] : Successfully hooked " << s << std::endl;
+		return true;
+	}
+}
+
+bool Hooks::setHooks()
+{
+	bool result = true;
+	result &= Hooks::hook_function((PVOID &)oDoString, (PBYTE)h_Dostring, _Global.doString[2].c_str());
+	result &= Hooks::hook_function((PVOID &)oGetTop, (PBYTE)h_GetTop, _Global.getTop[2].c_str());
+	return result;
+}

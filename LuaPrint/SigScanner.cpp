@@ -15,6 +15,7 @@ uint64_t SigScanner::Scan(std::vector<std::string> sig)
 	uint64_t address = -1;
 
 	// Scanning.
+	// NULL because we are searching for memory inside our own process.
 	address = FindPattern(NULL, sig[0].c_str(), sig[1].c_str());
 
 	// Output.

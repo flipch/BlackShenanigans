@@ -22,7 +22,7 @@ uint64_t SigScanner::Scan(std::vector<std::string> sig)
 		std::cout << "[SIG] : Failed at scanning " << sig[2] << std::endl;
 	}
 	else {
-		std::cout << "[SIG] : Succeeded at scanning " << sig[2] << std::endl << "[SIG] : Address -> " << std::hex << address << std::endl;
+		std::cout << "[SIG] : Succeeded at scanning " << sig[2] << std::endl << "[SIG] : Address -> 0x" << std::hex << address << std::endl;
 	}
 	return address;
 }

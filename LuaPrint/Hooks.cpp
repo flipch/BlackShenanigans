@@ -7,8 +7,6 @@ Global Hooks::_Global;
 Hooks::Hooks(Global _g)
 {
 	Hooks::_Global = _g;
-	Hooks::oDoString = (Hooks::_DoString)_Global.addresses["DoString"];
-	Hooks::oGetTop = (Hooks::_GetTop)_Global.addresses["GetTop"];
 }
 
 Hooks::~Hooks()
@@ -55,6 +53,8 @@ bool Hooks::hook_function(PVOID & t1, PBYTE t2, const char * s)
 bool Hooks::setHooks()
 {
 	bool result = true;
+	Hooks::oDoString = (Hooks::_DoString)_Global.addresses["DoString"];
+	Hooks::oGetTop = (Hooks::_GetTop)_Global.addresses["GetTop"];
 	result &= Hooks::hook_function((PVOID &)oDoString, (PBYTE)h_Dostring, _Global.doString[2].c_str());
 	result &= Hooks::hook_function((PVOID &)oGetTop, (PBYTE)h_GetTop, _Global.getTop[2].c_str());
 	return result;

@@ -30,6 +30,7 @@ DWORD WINAPI Hack::Start(LPVOID param)
 
 	// Logic loop.
 	while (true) {
+
 		if (GetAsyncKeyState(VK_NUMPAD5)) {
 			std::string cmd = "Inventory_SlotLClick(1)";
 			hooker.oDoString(hooker._Global.luaState, cmd.c_str(), cmd.size());

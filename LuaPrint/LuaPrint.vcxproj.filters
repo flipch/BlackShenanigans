@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{9d9fac19-2911-483a-9780-9a707e1738a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dxframework">
+      <UniqueIdentifier>{619d8874-16fa-4dd9-bdb2-db70e1cc9bb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -39,6 +45,24 @@
     <ClInclude Include="Hack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXFramework\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="DXFramework\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="DXFramework\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="DXFramework\examples\imgui_impl_win32.h">
+      <Filter>dxframework</Filter>
+    </ClInclude>
+    <ClInclude Include="DXFramework\examples\imgui_impl_dx11.h">
+      <Filter>dxframework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -64,6 +88,27 @@
     </ClCompile>
     <ClCompile Include="Hack.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFramework\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFramework\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFramework\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFramework\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFramework\examples\imgui_impl_win32.cpp">
+      <Filter>dxframework</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFramework\examples\imgui_impl_dx11.cpp">
+      <Filter>dxframework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

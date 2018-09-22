@@ -6,7 +6,8 @@ Hooks::_GetTop Hooks::oGetTop = NULL;
 Hooks::D3D11PresentHook Hooks::oD3D11Present = NULL;
 Global Hooks::_Global;
 
-bool presentFirstTime = true;
+bool firstTime = false;
+
 ID3D11Device *pDevice = NULL;
 ID3D11DeviceContext *pContext = NULL;
 
@@ -16,7 +17,6 @@ DWORD_PTR* pDeviceContextVTable = NULL;
 Hooks::Hooks(Global _g)
 {
 	Hooks::_Global = _g;
-	presentFirstTime = true;
 }
 
 Hooks::~Hooks()
@@ -47,16 +47,35 @@ INT(CALLBACK h_GetTop)(lua_State *L)
 
 HRESULT __stdcall h_D3D11Present(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
-	if (presentFirstTime)
+	if (!firstTime)
 	{
 		pSwapChain->GetDevice(__uuidof(pDevice), (void**)&pDevice);
 		pDevice->GetImmediateContext(&pContext);
 
-		presentFirstTime = false;
+		firstTime = true;
+
+		//Hooks::_Global.imguiInit = Renderer::InitIMGui(pDevice, pContext);
 	}
+	if (firstTime)
+	{
+		/*
+		ID3D11Texture2D *pBackBuffer;
+		pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBuffer);
 
-	std::cout << "Inside Present\n";
+		ID3D11RenderTargetView *pRTV;
 
+
+		pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRTV);
+
+
+		pContext->OMSetRenderTargets(1, &pRTV, NULL);
+
+		D3D11_TEXTURE2D_DESC backBufferDesc;
+		pBackBuffer->GetDesc(&backBufferDesc);
+
+		pBackBuffer->Release();
+		*/
+	}
 	return Hooks::oD3D11Present(pSwapChain, SyncInterval, Flags);
 }
 
@@ -127,6 +146,9 @@ bool Hooks::setHooks()
 
 		Hooks::oD3D11Present = (Hooks::D3D11PresentHook)pSwapChainVtable[8];
 		result &= Hooks::hook_function((PVOID &)oD3D11Present, (PBYTE)h_D3D11Present, "Present");
+		pDevice->Release();
+		pContext->Release();
+		pSwapChain->Release();
 		return result;
 	}
 }

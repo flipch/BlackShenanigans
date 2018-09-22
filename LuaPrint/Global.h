@@ -5,6 +5,8 @@ class Global
 public:
 	lua_State *luaState;
 
+	bool imguiInit = false;
+
 	std::unordered_map<std::string, uint64_t> addresses;
 
 	std::vector<std::string> doString =
